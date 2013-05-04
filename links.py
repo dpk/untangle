@@ -29,10 +29,13 @@ def links(h, url='', base=None):
   
   return (make_link(elt) for elt in linktags(h))
 
+def print_link(link):
+  print(link.source, link.dest, link.tag, link.rel, sep="\t", end="\n")
+
 def main(argv, input, output):
   h = html5.parse(input)
   for link in links(h, url=argv[1]):
-    print(link.source, link.dest, link.tag, link.rel, sep="\t", end="\n")
+    print_link(link, file=output)
 
 class link:
   def __init__(self, source, dest, tag, rel):
