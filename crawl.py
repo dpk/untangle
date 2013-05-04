@@ -30,11 +30,15 @@ class crawler:
         self.page_handler(resp, content)
         h = html5.document_fromstring(content, guess_charset=False)
         for link in links.links(h, url=url):
-          toadd.add(link.dest)
+          if self.isurlvalid(link.dest):
+            toadd.add(link.dest[:link.dest.rindex('#')] if '#' in link.dest else link.dest)
           self.link_handler(link)
       
       for url in toadd: self.urls.add(url)
       tocrawl = (self.urls ^ self.visited)
+  
+  def isurlvalid(self, url):
+    return (url[0:len(self.base)] == self.base)
 
 def main(argv, input, output):
   crawler(argv[1], link_handler=links.print_link).crawl()
